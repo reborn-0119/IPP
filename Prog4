@@ -1,0 +1,48 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+const int BIN_COUNT = 3; // Number of bins
+const int MAX_VALUE = 100; // Max value in input (exclusive)
+
+int getBinIndex(int value) {
+    int range = MAX_VALUE / BIN_COUNT;
+    return value / range;
+}
+
+int main() {
+    // Sample input
+    vector<int> data = {42, 15, 88, 32, 67, 23, 75, 11, 98, 54};
+
+    // Create bins
+    vector<vector<int>> bins(BIN_COUNT);
+
+    // Distribute data into bins
+    for (int num : data) {
+        int binIndex = getBinIndex(num);
+        if (binIndex >= BIN_COUNT) binIndex = BIN_COUNT - 1; // Edge case for max value
+        bins[binIndex].push_back(num);
+    }
+
+    // Sort each bin locally
+    for (int i = 0; i < BIN_COUNT; ++i) {
+        sort(bins[i].begin(), bins[i].end());
+    }
+
+    // Combine sorted bins
+    vector<int> sortedData;
+    for (const auto& bin : bins) {
+        sortedData.insert(sortedData.end(), bin.begin(), bin.end());
+    }
+
+    // Output result
+    cout << "Sorted Data: ";
+    for (int num : sortedData) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
